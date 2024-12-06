@@ -1,2 +1,2 @@
 #!/bin/sh
-docker build -t n2n:v2 .
+docker build -t n2n:v3 .
