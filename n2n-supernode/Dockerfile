@@ -3,6 +3,7 @@ MAINTAINER twxl1993 <twxl1993@gmail.com>
 
 WORKDIR /tmp
 RUN buildDeps=" \
+               wget \
                build-base \
                cmake \
                git \
@@ -20,12 +21,19 @@ RUN buildDeps=" \
                 && make install && rm -rf /tmp/* \
                 && apk del .build-deps
 
-FROM alpine:edge
+RUN cd /tmp && wget https://gitee.com/gnbdev/gnb_udp_over_tcp/releases/download/v1.0.0.0/gnb_udp_over_tcp.1.0.0.tar.gz \
+                && tar -zxvf gnb_udp_over_tcp.1.0.0.tar.gz \
+                && mv /tmp/gnb_udp_over_tcp/bin/Linux_x86_64/gnb_udp_over_tcp /usr/local/bin && rm -rf /tmp/*
+
+FROM ubuntu:18.04
 COPY --from=builder /usr/local/sbin/supernode /usr/sbin
 COPY --from=builder /usr/local/sbin/edge      /usr/sbin
 COPY --from=builder /usr/local/bin/n2n-benchmark /usr/sbin
+COPY --from=builder /usr/local/bin/gnb_udp_over_tcp /usr/sbin
+COPY start.sh /usr/sbin
 
-EXPOSE 7654/udp
+RUN apt update -y && apt-get install musl-tools musl-dev -y
 
-ENTRYPOINT ["supernode"]
-CMD ["-p", "7654","-v","-f"]
+EXPOSE 7654/udp 
+EXPOSE 7655/tcp
+ENTRYPOINT ["start.sh"]
