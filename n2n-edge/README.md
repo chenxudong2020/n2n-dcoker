@@ -3,3 +3,6 @@ docker run -itd --name=edge --net=host --privileged  --restart=always -v /tmp/zf
 
 
 默认配置文件/etc/n3n/edge.conf 具体参考 https://github.com/n42n/n3n
+
+一个配置参考
+![image](https://github.com/user-attachments/assets/eb69440d-1702-42af-869c-bae18381cbac)
