@@ -6,3 +6,8 @@ docker run -itd --name=edge --net=host --privileged  --restart=always -v /tmp/zf
 
 一个配置参考
 ![image](https://github.com/user-attachments/assets/eb69440d-1702-42af-869c-bae18381cbac)
+
+如果需要走tcp中转需要在edge配置文件中加入
+[connection]
+bind=50001
+connect_tcp=true
